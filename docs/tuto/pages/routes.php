@@ -137,10 +137,10 @@ class DefaultController extends \W\Controller\Controller
 }
 </code></pre>
 
-<h4>Depuis les templates</h4>
-<p>À partir d'un fichier de vue, vous pouvez (devriez) appeler la méthode <span class="code">$this->url()</span> pour générer une URL associée à une route : </p>
+<h4>Depuis les vues</h4>
+<p>À partir d'un fichier de vue, vous pouvez <strong>(devriez)</strong> appeler la méthode <span class="code">$this->url()</span> pour générer une URL associée à une route : </p>
 
-<pre><code>/* app/templates/default/home.php */
+<pre><code>/* app/Views/default/home.php */
 &lt;?php //... ?>
 
 &lt;a href="&lt;?= $this->url('contact') ?>">Contact&lt;/a> | 

@@ -59,6 +59,27 @@ class Controller
     	$this->redirect($uri);
 	}
 
+	/** 
+	 * Affiche un flash message
+	 * @param string $message Le message que l'on souhaite afficher
+	 * @param string $level Le type de message flash (default, info, success, danger, warning)
+	 */
+	public function flash($message, $level = 'info'){
+
+		$allowLevel = ['default', 'info', 'success', 'danger', 'warning'];
+
+		if(!in_array($level, $allowLevel)){
+			$level = 'info';
+		}
+
+		$_SESSION['flash'] = [
+			'message' 	=> (!isset($message) || empty($message)) ? 'No message defined' : ucfirst($message),
+			'level'	 	=> $level,
+		];
+
+		return;
+	}
+
 
 	/**
 	 * Affiche un template
@@ -73,7 +94,11 @@ class Controller
 		//charge nos extensions (nos fonctions personnalisées)
 		$engine->loadExtension(new \W\View\Plates\PlatesExtensions());
 
-		$app = getApp();
+		// le flash message
+		$flash_message = (isset($_SESSION['flash']) && !empty($_SESSION['flash'])) ? (object) $_SESSION['flash'] : null;
+
+		// 
+		$app = getApp();		
 
 		// Rend certaines données disponibles à tous les vues
 		// accessible avec $w_user & $w_current_route dans les fichiers de vue
@@ -82,6 +107,7 @@ class Controller
 				'w_user' 		  => $this->getUser(),
 				'w_current_route' => $app->getCurrentRoute(),
 				'w_site_name'	  => $app->getConfig('site_name'),
+				'w_flash_message' => $flash_message,
 			]
 		);
 

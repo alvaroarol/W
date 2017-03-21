@@ -65,6 +65,9 @@ class App
 			'security_role_property' => 'role',				//nom de la colonne pour le "role"
 
 			'security_login_route_name' => 'login',			//nom de la route affichant le formulaire de connexion
+
+			// configuration globale
+			'site_name'	=> '', 								// contiendra le nom du site
 		];
 
 		//remplace les configurations par défaut par celle de l'appli

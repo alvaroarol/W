@@ -17,5 +17,5 @@ W est un framework minimaliste. Il suit les structures et les grand thèmes des 
 
 
 ####Auteurs :
-* Guillaume Sylvestre : [@gsylvestre](https://github.com/gsylvestre) (auteur original)
-* Axel Wargnier : [@axessweb](https://github.com/axessweb)
+* Axel Wargnier : [@axessweb](https://github.com/axessweb) (lead dev)
+* Guillaume Sylvestre : [@gsylvestre](https://github.com/gsylvestre) (original dev)

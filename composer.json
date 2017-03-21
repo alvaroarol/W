@@ -1,7 +1,7 @@
 {
     "name": "webforce3/w",
-    "description": "Framework pédagogique de la WebForce3",
-    "version": "1.0.7",
+    "description": "Framework pédagogique WebForce3",
+    "version": "1.0.8",
     "minimum-stability": "dev",
     "license": "MIT",
     "prefer-stable": true,
