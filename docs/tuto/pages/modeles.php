@@ -6,7 +6,7 @@
 <h3>Comment créer un nouveau modèle ?</h3> 
 <p>Dans votre application, vous pourriez avoir un modèle par table MySQL (sans obligation). Chacune de ces classes devraient hériter de <span class="code">\W\Model\Model</span>, le modèle de base du framework, qui vous fera profiter de quelques méthodes utiles pour les requêtes simples à la base de données.</p>
 
-<p>Par exemple, pour créer un modèle relié à une table fictive de commentaires nommées <span class="code">comment</span> : </p>
+<p>Par exemple, pour créer un modèle relié à une table commentaires nommée <span class="code">comment</span> : </p>
 <pre><code>&lt;?php /* app/Model/CommentModel.php */
 namespace Model;
 
