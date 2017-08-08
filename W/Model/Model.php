@@ -286,8 +286,15 @@ abstract class Model
 
 		$sth = $this->dbh->prepare($sql);
 		foreach($data as $key => $value){
-			$value = ($stripTags) ? strip_tags($value) : $value;
-			$sth->bindValue(':'.$key, $value);
+			if(is_int($value)){
+				$sth->bindValue(':'.$key, $value, \PDO::PARAM_INT);
+			}
+			elseif(is_null($value)){
+				$sth->bindValue(':'.$key, $value, \PDO::PARAM_NULL);
+			}
+			else {
+				$sth->bindValue(':'.$key, ($stripTags) ? strip_tags($value) : $value, \PDO::PARAM_STR);
+			}
 		}
 
 		if (!$sth->execute()){
@@ -319,8 +326,15 @@ abstract class Model
 
 		$sth = $this->dbh->prepare($sql);
 		foreach($data as $key => $value){
-			$value = ($stripTags) ? strip_tags($value) : $value;
-			$sth->bindValue(':'.$key, $value);
+			if(is_int($value)){
+				$sth->bindValue(':'.$key, $value, \PDO::PARAM_INT);
+			}
+			elseif(is_null($value)){
+				$sth->bindValue(':'.$key, $value, \PDO::PARAM_NULL);
+			}
+			else {
+				$sth->bindValue(':'.$key, ($stripTags) ? strip_tags($value) : $value, \PDO::PARAM_STR);
+			}
 		}
 		$sth->bindValue(':id', $id);
 
