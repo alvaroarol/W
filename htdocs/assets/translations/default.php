@@ -14,6 +14,14 @@ $default_translations = array(
         'fr' => 'asdf',
         'en' => 'asdf english',
     ),
+    'home' => array(
+        'fr' => 'Accueil',
+        'en' => 'Home',
+    ),
+    'search' => array(
+        'fr' => 'recherche',
+        'en' => 'search',
+    ),
 
 );
 

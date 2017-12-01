@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => translate('helloWorld')]) ?>
+<?php $this->layout('layout', ['title' => translate('helloWorld'), 'lang' => $lang]) ?>
 
 
 <?php $this->start('main_content') ?>

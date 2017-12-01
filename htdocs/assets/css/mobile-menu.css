@@ -1,0 +1,132 @@
+/**
+ * DISPLAY NONE WHEN NOT MOBILE
+ */
+.mobile-bar,
+nav.mobile-nav{
+    display: none;
+}
+
+@media (max-width: 800px){
+
+    /**
+     * GENERAL
+     */
+    body{
+        padding-top: 4rem;
+    }
+    header{
+        width: 100%;
+    }
+
+    /**
+     * MOBILE BAR
+     */
+    .mobile-bar{
+        z-index: 9;
+        display: block;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        height: 4rem;
+        border-bottom: 0.1rem solid #296DB2;
+        color: white;
+        background-color: #111111;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    .mobile-bar img{
+        position: absolute;
+        top: 0.5rem;
+        left: 1rem;
+        height: 3rem;
+    }
+    .mobile-bar i{
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 3rem;
+        cursor: pointer;
+    }
+
+    /**
+     * MOBILE NAV
+     */
+    nav.mobile-nav{
+        z-index: 10;
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 0;
+        font-family: sans-serif;
+        color: white;
+        background-color: #111111;
+        overflow-x: hidden;
+        transition: width 0.5s;
+    }
+    nav.mobile-nav ul{
+        position: relative;
+        width: 100%;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    nav.mobile-nav a{
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: white;
+    }
+    nav.mobile-nav ul li{
+        padding: 0.25rem 0;
+    }
+    nav.mobile-nav ul li:first-of-type i{
+        position: relative;
+        top: -0.5rem;
+        font-size: 3rem;
+        cursor: pointer;
+    }
+    nav.mobile-nav ul li:nth-of-type(2){
+        align-self: flex-start;
+    }
+    nav.mobile-nav ul li:nth-of-type(2) img{
+        position: absolute;
+        top: 0.5rem;
+        left: 1rem;
+        height: 3rem;
+    }
+    nav.mobile-nav ul li form{
+        white-space: nowrap
+    }
+    nav.mobile-nav ul li form input[type="search"]{
+        height: 2rem;
+        border: none;
+        border-bottom: 1px solid white;
+        font-size: 1rem;
+        color: white;
+        background-color: transparent;
+    }
+    nav.mobile-nav ul li form button[type="submit"]{
+        border: none;
+        font-size: 1.5rem;
+        color: white;
+        background-color: transparent;
+        cursor: pointer;
+    }
+    nav.mobile-nav ul li:nth-of-type(10),
+    nav.mobile-nav ul li:nth-of-type(11){
+        display: flex;
+        flex-direction: row;
+        white-space: nowrap;
+    }
+    nav.mobile-nav ul li:nth-of-type(10) i{
+        margin: 0 0.5rem;
+        font-size: 2rem;
+    }
+    nav.mobile-nav ul li:nth-of-type(11) a{
+        margin: 0 0.25rem;
+    }
+
+}
