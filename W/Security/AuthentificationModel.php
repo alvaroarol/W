@@ -9,13 +9,12 @@ class AuthentificationModel
 {
 
 	/**
-	 * Vérifie qu'une combinaison d'email/username et mot de passe (en clair) sont présents en bdd et valides
-	 * @param  string $usernameOrEmail Le pseudo ou l'email à test
-	 * @param  string $plainPassword Le mot de passe en clair à tester
-	 * @return int  0 si invalide, l'identifiant de l'utilisateur si valide
+	 * Checks if the pair email/username corresponds to the password in the DB
+	 * @param string $usernameOrEmail Username or E-mail
+	 * @param string $plainPassword Password
+	 * @return integer 0 if invalid, the user id if valid
 	 */
-	public function isValidLoginInfo($usernameOrEmail, $plainPassword)
-	{
+	public function isValidLoginInfo($usernameOrEmail, $plainPassword){
 
 		$app = getApp();
 
@@ -31,47 +30,53 @@ class AuthentificationModel
 		}
 
 		return 0;
+
 	}
 
+
 	/**
-	 * Connecte un utilisateur
-	 * @param  array $user Le tableau contenant les données utilisateur
+	 * Logs a user in
+	 * @param array $user Table with logged in user's infos (except password)
 	 */
-	public function logUserIn($user)
-	{
+	public function logUserIn($user){
+
 		$app = getApp();
 
-		// Retire le mot de passe de la session
+		// Removes password from infos in $_SESSION
 		unset($user[$app->getConfig('security_password_property')]);
 
 		$_SESSION['user'] = $user;
+
 	}
 
+
 	/**
-	 * Déconnecte un utilisateur
+	 * Logs a user out
 	 */
-	public function logUserOut()
-	{
+	public function logUserOut(){
+
 		unset($_SESSION['user']);
+
 	}
 
+
 	/**
-	 * Retourne les données présente en session sur l'utilisateur connecté
-	 * @return mixed Le tableau des données utilisateur, null si non présent
+	 * Returns data from logged in user
+	 * @return mixed Array with user's info, null if not logged in
 	 */
-	public function getLoggedUser()
-	{
+	public function getLoggedUser(){
+
 		return (isset($_SESSION['user'])) ? $_SESSION['user'] : null;
+
 	}
 
-	
 
 	/**
-	 * Utilise les données utilisateurs présentes en base pour mettre à jour les données en session
+	 * Refreshes user's infos in $_SESSION from DB infos
 	 * @return boolean
 	 */
-	public function refreshUser()
-	{
+	public function refreshUser(){
+
 		$app = getApp();
 		$usersModel = new UsersModel();
 		$userFromSession = $this->getLoggedUser();
@@ -84,15 +89,19 @@ class AuthentificationModel
 		}
 
 		return false;
+
 	}
 
+
 	/**
-	 * Créer un hash simple d'un mot de passe en utilisant l'algorithme par défaut
-	 * @param  string $plainPassword Le mot de passe en clair à hasher
-	 * @return string Le mot de passé hashé ou false si une erreur survient
+	 * Hashes password with default algorithm
+	 * @param string $plainPassword Password
+	 * @return string Hashed password
 	 */
-	public function hashPassword($plainPassword)
-	{
+	public function hashPassword($plainPassword){
+
 		return password_hash($plainPassword, PASSWORD_DEFAULT);
+
 	}
+
 }

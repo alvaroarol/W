@@ -1,5 +1,12 @@
-<?php $this->layout('layout', ['title' => 'Perdu ?']) ?>
-
-<?php $this->start('main_content'); ?>
-<h1>404. Perdu ?</h1>
-<?php $this->stop('main_content'); ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title><?= $w_site_name ?> - 404</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>404</h1>
+        <p>La page à laquelle vous tentez d'accéder n'existe pas.</p>
+    </body>
+</html>

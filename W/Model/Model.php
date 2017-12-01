@@ -3,42 +3,43 @@
 namespace W\Model;
 
 /**
- * Le modèle de base à étendre
+ * Base model
  */
-abstract class Model 
-{
+abstract class Model{
 
-	/** @var string $table Le nom de la table */
+	/** @var string $table Table name */
 	protected $table;
 
-	/** @var int $primaryKey Le nom de la clef primaire (défaut id) */
+	/** @var integer $primaryKey Primary key */
 	protected $primaryKey = 'id';
 
-	/** @var \PDO $dbh Connexion à la base de données */
+	/** @var \PDO $dbh DB connection */
 	protected $dbh;
 
 	/**
-	 * Constructeur
+	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct(){
+
 		$this->setTableFromClassName();
 		$this->dbh = ConnectionModel::getDbh();
+
 	}
 
+
 	/**
-	 * Déduit le nom de la table en fonction du nom du modèle enfant
+	 * Guesses the table name from the child model class
 	 * @return W\Model $this
 	 */
-	private function setTableFromClassName()
-	{
+	private function setTableFromClassName(){
+
 		$app = getApp();
 
 		if(empty($this->table)){
-			// Nom de la class enfant
+			// Child model class name
 			$className = (new \ReflectionClass($this))->getShortName();
 
-			// Retire le Model et converti en underscore_case (snake_case)
+			// Removes "Model" from the name and converts it to snake case
 			$tableName = str_replace('Model', '', $className);
 			$tableName = ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $tableName)), '_');
 		}
@@ -49,55 +50,65 @@ abstract class Model
 		$this->table = $app->getConfig('db_table_prefix') . $tableName;
 
 		return $this;
+
 	}
 
+
 	/**
-	 * Définit le nom de la table (si le nom déduit ne convient pas)
-	 * @param string $table Nom de la table
+	 * Manually define table name
+	 * @param string $table table name
 	 * @return W\Model $this
 	 */
-	public function setTable($table)
-	{
+	public function setTable($table){
+
 		$this->table = $table;
 		return $this;
+
 	}
 
+
 	/**
-	 * Retourne le nom de la table associée à ce gestionnaire
-	 * @return string Le nom de la table
+	 * Get table name
+	 * @return string
 	 */
-	public function getTable()
-	{
+	public function getTable(){
+
 		return $this->table;
+
 	}
 
+
 	/**
-	 * Définit le nom de la clef primaire
-	 * @param string $primaryKey Nom de la clef primaire de la table
+	 * Manually define primary key
+	 * @param string $primaryKey Primary key
 	 * @return W\Model $this
 	 */
-	public function setPrimaryKey($primaryKey)
-	{
+	public function setPrimaryKey($primaryKey){
+
 		$this->primaryKey = $primaryKey;
 		return $this;
+
 	}
 
+
 	/**
-	 * Retourne le nom de la clef primaire
-	 * @return string Le nom de la clef primaire
+	 * Get primary key
+	 * @return string
 	 */
-	public function getPrimaryKey()
-	{
+	public function getPrimaryKey(){
+
 		return $this->primaryKey;
+
 	}
 
+
 	/**
-	 * Récupère une ligne de la table en fonction d'un identifiant
-	 * @param  integer Identifiant
-	 * @return mixed Les données sous forme de tableau associatif
+	 * Select a single row from id
+	 * @param  integer id
+	 * @return mixed associative array with query result
 	 */
-	public function find($id)
-	{
+	public function find($id){
+
 		if (!is_numeric($id)){
 			return false;
 		}
@@ -108,14 +119,17 @@ abstract class Model
 		$sth->execute();
 
 		return $sth->fetch();
+
 	}
 
+
     /**
-     * Récupère la ligne suivante de celle de l'identifiant
-     * @param integer Identifiant
-     * @return mixed Les données sous forme de tableau associatif
+     * Select row right after id
+     * @param integer id
+     * @return mixed associative array with query result
      */
     public function findNext($id){
+
         if (!is_numeric($id)){
             return false;
         }
@@ -134,14 +148,17 @@ abstract class Model
         }
 
         return $result;
+
     }
 
+
     /**
-     * Récupère la ligne précédente de celle de l'identifiant
-     * @param integer Identifiant
-     * @return mixed Les données sous forme de tableau associatif
+     * Select row right before id
+     * @param integer id
+     * @return mixed associative array with query result
      */
     public function findPrevious($id){
+
         if (!is_numeric($id)){
             return false;
         }
@@ -160,23 +177,24 @@ abstract class Model
         }
 
         return $result;
+
     }
 
+
 	/**
-	 * Récupère toutes les lignes de la table
-	 * @param $orderBy La colonne en fonction de laquelle trier
-	 * @param $orderDir La direction du tri, ASC ou DESC
-	 * @param $limit Le nombre maximum de résultat à récupérer
-	 * @param $offset La position à partir de laquelle récupérer les résultats
-	 * @return array Les données sous forme de tableau multidimensionnel
+	 * Select all rows from table
+	 * @param $orderBy column to order by
+	 * @param $orderDir order direction (ASC, DESC)
+	 * @param $limit limit
+	 * @param $offset offset
+	 * @return array multidimensional associative array with query result
 	 */
-	public function findAll($orderBy = '', $orderDir = 'ASC', $limit = null, $offset = null)
-	{
+	public function findAll($orderBy = '', $orderDir = 'ASC', $limit = null, $offset = null){
 
 		$sql = 'SELECT * FROM ' . $this->table;
 		if (!empty($orderBy)){
 
-			//sécurisation des paramètres, pour éviter les injections SQL
+			// Secure parameters against SQL injections
 			if(!preg_match('#^[a-zA-Z0-9_$]+$#', $orderBy)){
 				die('Error: invalid orderBy param');
 			}
@@ -203,30 +221,32 @@ abstract class Model
 		$sth->execute();
 
 		return $sth->fetchAll();
+
 	}
 
+
 	/**
-	 * Effectue une recherche
-	 * @param array $data Un tableau associatif des valeurs à rechercher
-	 * @param string $operator La direction du tri, AND ou OR
-	 * @param boolean $stripTags Active le strip_tags automatique sur toutes les valeurs
-	 * @return mixed false si erreur, le résultat de la recherche sinon
+	 * Approximative search (LIKE)
+	 * @param array $data associative array with columns and values to search
+	 * @param string $operator condition operator if multiple values searched (AND, OR)
+	 * @param boolean $stripTags if false, don't use strip_tags
+	 * @return mixed multidimensional associative array with query result, false if error
 	 */
 	public function search(array $search, $operator = 'OR', $stripTags = true){
 
-		// Sécurisation de l'opérateur
+		// Secure parameters against SQL injections
 		$operator = strtoupper($operator);
 		if($operator != 'OR' && $operator != 'AND'){
 			die('Error: invalid operator param');
 		}
 
         $sql = 'SELECT * FROM ' . $this->table.' WHERE';
-                
+
 		foreach($search as $key => $value){
 			$sql .= " `$key` LIKE :$key ";
 			$sql .= $operator;
 		}
-		// Supprime les caractères superflus en fin de requète
+
 		if($operator == 'OR') {
 			$sql = substr($sql, 0, -3);
 		}
@@ -244,15 +264,59 @@ abstract class Model
 			return false;
 		}
         return $sth->fetchAll();
+
 	}
 
+
 	/**
-	 * Efface une ligne en fonction de son identifiant
-	 * @param mixed $id L'identifiant de la ligne à effacer
-	 * @return mixed La valeur de retour de la méthode execute()
+	 * Exact search (=)
+	 * @param array $data associative array with columns and values to search
+	 * @param string $operator condition operator if multiple values searched (AND, OR)
+	 * @param boolean $stripTags if false, don't use strip_tags
+	 * @return mixed associative array with query result, false if error
 	 */
-	public function delete($id)
-	{
+	public function exactSearch(array $search, $operator = 'OR', $stripTags = true){
+
+		// Secure parameters against SQL injections
+		$operator = strtoupper($operator);
+		if($operator != 'OR' && $operator != 'AND'){
+			die('Error: invalid operator param');
+		}
+
+        $sql = 'SELECT * FROM ' . $this->table.' WHERE';
+
+		foreach($search as $key => $value){
+			$sql .= " `$key` = :$key ";
+			$sql .= $operator;
+		}
+
+		if($operator == 'OR') {
+			$sql = substr($sql, 0, -3);
+		}
+		elseif($operator == 'AND') {
+			$sql = substr($sql, 0, -4);
+		}
+
+		$sth = $this->dbh->prepare($sql);
+
+		foreach($search as $key => $value){
+			$value = ($stripTags) ? strip_tags($value) : $value;
+			$sth->bindValue(':'.$key, $value);
+		}
+		if(!$sth->execute()){
+			return false;
+		}
+        return $sth->fetchAll();
+	}
+
+
+	/**
+	 * Delete a row from id
+	 * @param mixed $id id
+	 * @return mixed execute() return value
+	 */
+	public function delete($id){
+
 		if (!is_numeric($id)){
 			return false;
 		}
@@ -261,16 +325,17 @@ abstract class Model
 		$sth = $this->dbh->prepare($sql);
 		$sth->bindValue(':id', $id);
 		return $sth->execute();
+
 	}
 
+
 	/**
-	 * Ajoute une ligne
-	 * @param array $data Un tableau associatif de valeurs à insérer
-	 * @param boolean $stripTags Active le strip_tags automatique sur toutes les valeurs
-	 * @return mixed false si erreur, les données insérées mise à jour sinon
+	 * Insert a row
+	 * @param array $data associative array with columns and values to insert
+	 * @param boolean $stripTags if false, don't use strip_tags
+	 * @return mixed multidimensional associative array with inserted rows, false if error
 	 */
-	public function insert(array $data, $stripTags = true)
-	{
+	public function insert(array $data, $stripTags = true){
 
 		$colNames = array_keys($data);
 		$colNamesEscapes = $this->escapeKeys($colNames);
@@ -280,7 +345,7 @@ abstract class Model
 		foreach($data as $key => $value){
 			$sql .= ":$key, ";
 		}
-		// Supprime les caractères superflus en fin de requète
+
 		$sql = substr($sql, 0, -2);
 		$sql .= ')';
 
@@ -301,26 +366,28 @@ abstract class Model
 			return false;
 		}
 		return $this->find($this->lastInsertId());
+
 	}
 
+
 	/**
-	 * Modifie une ligne en fonction d'un identifiant
-	 * @param array $data Un tableau associatif de valeurs à insérer
-	 * @param mixed $id L'identifiant de la ligne à modifier
-	 * @param boolean $stripTags Active le strip_tags automatique sur toutes les valeurs
-	 * @return mixed false si erreur, les données mises à jour sinon
+	 * Updates a row from id
+	 * @param array $data associative array with columns and values to update
+	 * @param mixed $id id
+	 * @param boolean $stripTags if false, don't use strip_tags
+	 * @return mixed multidimensional associative array with updated values, false if error
 	 */
-	public function update(array $data, $id, $stripTags = true)
-	{
+	public function update(array $data, $id, $stripTags = true){
+
 		if (!is_numeric($id)){
 			return false;
 		}
-		
+
 		$sql = 'UPDATE ' . $this->table . ' SET ';
 		foreach($data as $key => $value){
 			$sql .= "`$key` = :$key, ";
 		}
-		// Supprime les caractères superflus en fin de requète
+
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE ' . $this->primaryKey .' = :id';
 
@@ -342,26 +409,28 @@ abstract class Model
 			return false;
 		}
 		return $this->find($id);
+
 	}
 
 	/**
-	 * Retourne l'identifiant de la dernière ligne insérée
-	 * @return int L'identifiant
+	 * Gets id from last inserted row
+	 * @return integer id
 	 */
-	protected function lastInsertId()
-	{
+	protected function lastInsertId(){
+
 		return $this->dbh->lastInsertId();
+
 	}
 
 	/**
-	 * Echappe les clés d'un tableau pour les mots clés réservés par SQL
-	 * @param array $datas Une tableau de clé
-	 * @return Les clés échappées
+	 * Adds escape to table keys to prevent conflict with SQL commands
+	 * @param array $datas Array of keys
+	 * @return array Escaped keys
 	 */
 	private function escapeKeys($datas)
 	{
 		return array_map(function($val){
 			return '`'.$val.'`';
 		}, $datas);
-	}	
+	}
 }

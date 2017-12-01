@@ -3,119 +3,130 @@
 namespace W;
 
 /**
- * Gère la configuration et exécute le routeur
+ * Manages the config and executes the router
  */
-class App 
-{
-	/** @var array Contient le tableau de configuration complet */
+class App{
+
+	/** @var array Contains the complete config table */
 	protected $config;
-	/** @var \AltoRouter Le routeur */
+	/** @var \AltoRouter The router */
 	protected $router;
-	/** @var string Le sous-dossier d'URL dans lequel on accède à l'appli */
+	/** @var string URL sub-folder from which the application is accessed */
 	protected $basePath;
 
+
 	/**
-	 * Constructeur
-	 * @param array $w_routes Tableau de routes
-	 * @param array $w_config Tableau optionnel de configurations
+	 * Constructor
+	 * @param array $w_routes Routing table
+	 * @param array $w_config Optional config table
 	 */
-	public function __construct(array $w_routes, array $w_config = array())
-	{
+	public function __construct(array $w_routes, array $w_config = array()){
+
 		session_start();
 		$this->setConfig($w_config);
 		$this->routingSetup($w_routes);
+
 	}
 
+
 	/**
-	 * Configure le routage
-	 * @param  array  $w_routes Tableau de routes
+	 * Configures routing
+	 * @param array $w_routes Routing table
 	 */
-	private function routingSetup(array $w_routes)
-	{
+	private function routingSetup(array $w_routes){
+
 		$this->router = new \AltoRouter();
 
-		//voir public/.htaccess
-		//permet d'éviter une configuration désagréable (sous-dossier menant à l'appli)
+		// See .htaccess
 		$this->basePath = (empty($_SERVER['W_BASE'])) ? '' : $_SERVER['W_BASE'];
 
 		$this->router->setBasePath($this->basePath);
 		$this->router->addRoutes($w_routes);
+
 	}
 
 	/**
-	 * Récupère les configurations fournies par l'appli
-	 * @param array $w_config Tableau de configuration
+	 * Gets the config given by the application
+	 * @param array $w_config Config table
 	 */
-	private function setConfig(array $w_config)
-	{
+	private function setConfig(array $w_config){
+
 		$defaultConfig = [
-		   	//information de connexion à la bdd
-			'db_host' => 'localhost',						//hôte (ip, domaine) de la bdd
-		    'db_user' => 'root',							//nom d'utilisateur pour la bdd
-		    'db_pass' => '',								//mot de passe de la bdd
-		    'db_name' => '',								//nom de la bdd
-		    'db_table_prefix' => '',						//préfixe ajouté aux noms de table
+		   	// DB connexion info
+			'db_host' => 'localhost',
+		    'db_user' => 'root',
+		    'db_pass' => '',
+		    'db_name' => '',
+		    'db_table_prefix' => '',
 
-			//authentification, autorisation
-			'security_user_table' => 'users',				//nom de la table contenant les infos des utilisateurs
-			'security_id_property' => 'id',					//nom de la colonne pour la clef primaire
-			'security_username_property' => 'username',		//nom de la colonne pour le "pseudo"
-			'security_email_property' => 'email',			//nom de la colonne pour l'"email"
-			'security_password_property' => 'password',		//nom de la colonne pour le "mot de passe"
-			'security_role_property' => 'role',				//nom de la colonne pour le "role"
+			// Authentification, autorisation
+			'security_user_table' => 'users',
+			'security_id_property' => 'id',
+			'security_username_property' => 'username',
+			'security_email_property' => 'email',
+			'security_password_property' => 'password',
+			'security_role_property' => 'role',
 
-			'security_login_route_name' => 'login',			//nom de la route affichant le formulaire de connexion
+			'security_login_route_name' => 'login',
 
-			// configuration globale
-			'site_name'	=> '', 								// contiendra le nom du site
+			// Global config
+			'site_name'	=> '',
 		];
 
-		//remplace les configurations par défaut par celle de l'appli
+		// Merges user config with default config
 		$this->config = array_merge($defaultConfig, $w_config);
+
 	}
 
 
 	/**
-	 * Récupère une donnée de configuration
-	 * @param   $key Le clef de configuration
-	 * @return mixed La valeur de configuration
+	 * Gets a config entry
+	 * @param string $key Config table key
+	 * @return mixed Config value
 	 */
-	public function getConfig($key)
-	{
+	public function getConfig($key){
+
 		return (isset($this->config[$key])) ? $this->config[$key] : null;
+
 	}
 
+
 	/**
-	 * Exécute le routeur
+	 * Launches router
 	 */
-	public function run()
-	{
+	public function run(){
 
 		$matcher = new \W\Router\AltoRouter\Matcher($this->router);
 		$matcher->match();
+
 	}
 
+
 	/**
-	 * Retourne le routeur
-	 * @return \AltoRouter Le routeur
+	 * Gets router
+	 * @return \AltoRouter The router
 	 */
-	public function getRouter()
-	{
+	public function getRouter(){
+
 		return $this->router;
+
 	}
 
+
 	/**
-	 * Retourne la base path
-	 * @return  string La base path
+	 * Gets base path
+	 * @return string base path
 	 */
-	public function getBasePath()
-	{
+	public function getBasePath(){
+
 		return $this->basePath;
+
 	}
 
+
 	/**
-	 * Retourne le nom de la route actuelle
-	 * @return mixed Le nom de la route actuelle depuis \AltoRouter ou le false
+	 * Returns the current route name
+	 * @return mixed The route name from \AltoRouter or false
 	 */
 	public function getCurrentRoute(){
 
@@ -126,5 +137,7 @@ class App
 		else {
 			return false;
 		}
+
 	}
+
 }

@@ -6,25 +6,24 @@ use W\Security\AuthentificationModel;
 use W\Security\AuthorizationModel;
 
 /**
- * Le contrôleur de base à étendre
+ * Base controller
  */
-class Controller 
-{
+class Controller{
 
 	/**
-	 * Constante du chemin du dossier des vues
+	 * Views path
 	 */
 	const PATH_VIEWS = '../app/Views';
 
 	/**
-	 * Génère l'URL correspondant à une route nommée
-	 * @param  string $routeName Le nom de route
-	 * @param  mixed  $params    Tableau de paramètres optionnel de cette route
-	 * @param  boolean $absolute Retourne une url absolue si true (relative si false)
-	 * @return L'URL correspondant à la route
+	 * Creates URL corresponding to an existing route
+	 * @param string $routeName Route name
+	 * @param mixed  $params Parameters array
+	 * @param boolean $absolute If true, returns an absolute URL
+	 * @return string Route URL
 	 */
-	public static function generateUrl($routeName, $params = array(), $absolute = false)
-	{
+	public static function generateUrl($routeName, $params = array(), $absolute = false){
+
 		$params = (empty($params)) ? array() : $params;
 
 		$app = getApp();
@@ -36,33 +35,39 @@ class Controller
 			$url = $u->getBaseUrl() . $routeUrl;
 		}
 		return $url;
+
 	}
 
+
 	/**
-	 * Redirige vers une URI
-	 * @param  string $uri URI vers laquelle rediriger
+	 * Redirect tp a URI
+	 * @param string $uri URI
 	 */
-	public function redirect($uri)
-	{
+	public function redirect($uri){
+
 		header("Location: $uri");
-		die();	
+		die();
+
 	}
 
+
 	/**
-	 * Redirige vers une route nommée
-	 * @param  string $routeName Le nom de route vers laquelle rediriger
-	 * @param  array  $params    Tableau de paramètres optionnel de cette route
+	 * Redirects to an existing route
+	 * @param string $routeName Route name
+	 * @param array $params Parameter table
 	 */
-	public function redirectToRoute($routeName, array $params = array())
-	{
+	public function redirectToRoute($routeName, array $params = array()){
+
 		$uri = $this->generateUrl($routeName, $params);
     	$this->redirect($uri);
+
 	}
 
-	/** 
-	 * Affiche un flash message
-	 * @param string $message Le message que l'on souhaite afficher
-	 * @param string $level Le type de message flash (default, info, success, danger, warning)
+
+	/**
+	 * Shows a flash message
+	 * @param string $message Message
+	 * @param string $level Message level (default, info, success, danger, warning)
 	 */
 	public function flash($message, $level = 'info'){
 
@@ -78,30 +83,27 @@ class Controller
 		];
 
 		return;
+
 	}
 
 
 	/**
-	 * Affiche un template
-	 * @param string $file Chemin vers le template, relatif à app/Views/
-	 * @param array  $data Données à rendre disponibles à la vue
+	 * Displays a view
+	 * @param string $file Path to view relative to app/Views/
+	 * @param array $data Data array to send to view
 	 */
-	public function show($file, array $data = array())
-	{
-		//incluant le chemin vers nos vues
+	public function show($file, array $data = array()){
+
 		$engine = new \League\Plates\Engine(self::PATH_VIEWS);
 
-		//charge nos extensions (nos fonctions personnalisées)
 		$engine->loadExtension(new \W\View\Plates\PlatesExtensions());
 
-		// le flash message
+		// Flash message
 		$flash_message = (isset($_SESSION['flash']) && !empty($_SESSION['flash'])) ? (object) $_SESSION['flash'] : null;
 
-		// 
-		$app = getApp();		
+		$app = getApp();
 
-		// Rend certaines données disponibles à tous les vues
-		// accessible avec $w_user & $w_current_route dans les fichiers de vue
+		// Data sent to all views
 		$engine->addData(
 			[
 				'w_user' 		  => $this->getUser(),
@@ -111,24 +113,26 @@ class Controller
 			]
 		);
 
-		// Retire l'éventuelle extension .php
+		// Removes ".php" extension
 		$file = str_replace('.php', '', $file);
 
-		// Affiche le template
+		// Displays view
 		echo $engine->render($file, $data);
-		
-		// Supprime les messages flash pour qu'ils n'apparaissent qu'une fois
+
+		// Deletes flash messages after displaying them
 		if(isset($_SESSION['flash'])) {
 			unset($_SESSION['flash']);
 		}
 		die();
+
 	}
 
+
 	/**
-	 * Affiche une page 403
+	 * Display 403
 	 */
-	public function showForbidden()
-	{
+	public function showForbidden(){
+
 		header('HTTP/1.0 403 Forbidden');
 
 		$file = self::PATH_VIEWS.'/w_errors/403.php';
@@ -138,13 +142,15 @@ class Controller
 		else {
 			die('403');
 		}
+
 	}
 
+
 	/**
-	 * Affiche une page 404
+	 * Display 404
 	 */
-	public function showNotFound()
-	{
+	public function showNotFound(){
+
 		header('HTTP/1.0 404 Not Found');
 
 		$file = self::PATH_VIEWS.'/w_errors/404.php';
@@ -153,25 +159,29 @@ class Controller
 		}
 		else {
 			die('404');
-		}	
+		}
+
 	}
 
+
 	/**
-	 * Récupère l'utilisateur actuellement connecté
+	 * Gets currently connected user
 	 */
-	public function getUser()
-	{
+	public function getUser(){
+
 		$authenticationModel = new AuthentificationModel();
 		$user = $authenticationModel->getLoggedUser();
 		return $user;
+
 	}
 
+
 	/**
-	 * Autorise l'accès à un ou plusieurs rôles
-	 * @param mixed $roles Tableau de rôles, ou chaîne pour un seul
+	 * Authorises access to one or more roles
+	 * @param mixed $roles roles array, or string if only one role
 	 */
-	public function allowTo($roles)
-	{
+	public function allowTo($roles){
+
 		if (!is_array($roles)){
 			$roles = [$roles];
 		}
@@ -183,16 +193,17 @@ class Controller
 		}
 
 		$this->showForbidden();
+
 	}
 
 
 	/**
-	 * Retourne une réponse JSON au client
-	 * @param mixed $data Les données à retourner
-	 * @return les données au format json
+	 * Returns a JSON response to client
+	 * @param mixed $data values to return
+	 * @return string data in JSON format
 	 */
-	public function showJson($data)
-	{
+	public function showJson($data){
+		
 		header('Content-type: application/json');
 		$json = json_encode($data, JSON_PRETTY_PRINT);
 		if($json){

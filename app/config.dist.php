@@ -1,26 +1,25 @@
-<?php 
+<?php
 
 $w_config = [
-   	//information de connexion à la bdd
-	'db_host' => 'localhost',						//hôte (ip, domaine) de la bdd
-    'db_user' => 'root',							//nom d'utilisateur pour la bdd
-    'db_pass' => '',								//mot de passe de la bdd
-    'db_name' => '',								//nom de la bdd
-    'db_table_prefix' => '',						//préfixe ajouté aux noms de table
+   	// DB connexion info
+	'db_host' => 'localhost',
+    'db_user' => 'root',
+    'db_pass' => '',
+    'db_name' => '',
+    'db_table_prefix' => '',
 
-	//authentification, autorisation
-	'security_user_table' => 'users',				//nom de la table contenant les infos des utilisateurs
-	'security_id_property' => 'id',					//nom de la colonne pour la clef primaire
-	'security_username_property' => 'username',		//nom de la colonne pour le "pseudo"
-	'security_email_property' => 'email',			//nom de la colonne pour l'"email"
-	'security_password_property' => 'password',		//nom de la colonne pour le "mot de passe"
-	'security_role_property' => 'role',				//nom de la colonne pour le "role"
+	// Authentification, autorisation
+	'security_user_table' => 'users',
+	'security_id_property' => 'id',
+	'security_username_property' => 'username',
+	'security_email_property' => 'email',
+	'security_password_property' => 'password',
+	'security_role_property' => 'role',
 
-	'security_login_route_name' => 'login',			//nom de la route affichant le formulaire de connexion
+	'security_login_route_name' => 'login',
 
-	// configuration globale
-	'site_name'	=> '', 								// contiendra le nom du site
+	// Global config
+	'site_name'	=> '',
 ];
 
 require('routes.php');
-

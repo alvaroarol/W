@@ -6,41 +6,42 @@ use \PDO;
 use \PDOException;
 
 /**
- * Gère la connexion à la base de données (Singleton Pattern)
+ * Manages connection to DB (Singleton Pattern)
  */
-class ConnectionModel
-{
+class ConnectionModel{
 
 	private static $dbh;
 
 	/**
-	 * Crée une connexion ou la retourne si présente
+	 * Creates connection or returns it if it already exists
 	 */
-	public static function getDbh()
-	{
+	public static function getDbh(){
+
 		if(!self::$dbh){
 			self::setNewDbh();
 		}
 		return self::$dbh;
+
 	}
 
+
 	/**
-	 * Crée une nouvelle connexion à la base
+	 * Creates a new connection to the DB
 	 */
-	public static function setNewDbh()
-	{
+	public static function setNewDbh(){
+
 		$app = getApp();
-		
-		try {
-		    //connexion à la base avec la classe PDO et le DSN
+
+		try{
 		    self::$dbh = new PDO('mysql:host='.$app->getConfig('db_host').';dbname='.$app->getConfig('db_name'), $app->getConfig('db_user'), $app->getConfig('db_pass'), array(
-		        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', //on s'assure de communiquer en utf8
-		        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //on récupère nos données en array associatif par défaut
-		        PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING         //on affiche les erreurs. À modifier en prod. 
+		        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+		        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+		        PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
 		    ));
-		} catch (PDOException $e) { //attrappe les éventuelles erreurs de connexion
+		}catch(PDOException $e){
 		    echo 'Erreur de connexion : ' . $e->getMessage();
 		}
+
 	}
 
 }

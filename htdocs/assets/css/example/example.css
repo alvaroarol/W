@@ -1,0 +1,51 @@
+.container{
+    margin: auto;
+    max-width: 1200px;
+}
+
+.container>h1{
+    padding: 3rem 0;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.container>h2{
+    padding: 2rem 0;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.slider{
+    height: 30rem;
+}
+
+.slider article{
+    height: 30rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+.slider article h1{
+    font-size: 2rem;
+}
+
+.slider article p{
+    text-align: center;
+}
+
+.slider article:nth-of-type(1){
+    color: white;
+    background-color: #333333;
+}
+
+.slider article:nth-of-type(2){
+    color: white;
+    background-color: #999999;
+}
+
+.slider article:nth-of-type(3){
+    color: black;
+    background-color: #CCCCCC;
+}

@@ -1,6 +1,17 @@
-RewriteEngine On
+# Refresh cache for particular file types (here css and js)
+# <filesMatch ".(css|js)$">
+# Header set Cache-Control "max-age=0, public"
+# </filesMatch>
 
-# PIQUÉ AU HTACCESS DE SYMFONY2 : 
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+# Redirect everything to http and trailing slash
+RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [L]
+# Redirect everything to https and trailing slash
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1/ [L]
+
 # Determine the RewriteBase automatically and set it as environment variable.
 # If you are using Apache aliases to do mass virtual hosting or installed the
 # project in a subdirectory, the base path will be prepended to allow proper
@@ -10,9 +21,9 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=W_BASE:%1]
 
-# Pas de réécriture sur les vrais fichiers
+# No rewrite on real files
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule .? - [L]
 
-# Réécrit tout le reste à public/index.php.
+# Rewrites everything else to htdocs/index.php.
 RewriteRule .? %{ENV:W_BASE}/index.php [L]

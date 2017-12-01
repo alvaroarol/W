@@ -6,41 +6,46 @@ use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;
 
 /**
- * @link http://platesphp.com/engine/extensions/ Documentation Plates
+ * @link http://platesphp.com/engine/extensions/ Plates documentation
  */
-class PlatesExtensions implements ExtensionInterface
-{
+class PlatesExtensions implements ExtensionInterface{
 
 	/**
-	 * Enregistre les nouvelles fonctions dans Plates
-     * @param \League\Plates\Engine $engine L'instance du moteur de template
+	 * Saves new functions to Plates
+     * @param \League\Plates\Engine $engine Instance of the Plates engine
 	 */
-    public function register(Engine $engine)
-    {
+    public function register(Engine $engine){
+
         $engine->registerFunction('assetUrl', [$this, 'assetUrl']);
         $engine->registerFunction('url', [$this, 'generateUrl']);
+
     }
 
+
     /**
-     * Retourne l'URL relative d'un asset
-     * @param string $path Le chemin vers le fichier, relatif à public/assets/
-     * @return string L'URL relative vers le fichier
+     * Returns the asset URL
+     * @param string $path The path to the file, relative to public/assets/
+     * @return string The asset URL
      */
-    public function assetUrl($path)
-    {
+    public function assetUrl($path){
+
         $app = getApp();
         return $app->getBasePath() . '/assets/' . ltrim($path, '/');
+
     }
 
+
     /**
-     * Génère l'URL correspondant à une route nommée (copie de celle dans \W\Controller\Controller)
-     * @param string $routeName Le nom de route
-     * @param mixed  $params    Tableau de paramètres optionnel de cette route
-     * @param boolean $absolute Retourne une url absolue si true (relative si false)
+     * Creates URL from route name
+     * @param string $routeName Route name
+     * @param mixed $params Array of parameters for the route
+     * @param boolean $absolute If true, returns an absolute URL
      * @return L'URL correspondant à la route
      */
-    public function generateUrl($routeName, $params = array(), $absolute = false)
-    {
+    public function generateUrl($routeName, $params = array(), $absolute = false){
+
     	return \W\Controller\Controller::generateUrl($routeName, $params, $absolute);
+
     }
+    
 }

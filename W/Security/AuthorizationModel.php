@@ -6,28 +6,26 @@ use \W\Session\SessionModel;
 use \W\Security\AuthentificationModel;
 
 /**
- * Gère l'accès aux pages en fonction des droits utilisateurs
+ * Manages access to pages from user rights
  */
-class AuthorizationModel
-{
+class AuthorizationModel{
 
 	/**
-	 * Vérifie les droits d'accès de l'utilisateur en fonction de son rôle
-	 * @param  string  	$role Le rôle pour lequel on souhaite vérifier les droits d'accès
-	 * @return boolean 	true si droit d'accès, false sinon
+	 * Checks access rights from user role
+	 * @param string $role role needed for access
+	 * @return boolean true if access granted, false if not
 	 */
-	public function isGranted($role)
-	{
+	public function isGranted($role){
+
 		$app = getApp();
 		$roleProperty = $app->getConfig('security_role_property');
 
-		//récupère les données en session sur l'utilisateur
+		// Gets user infos in $_SESSION
 		$authentificationModel = new AuthentificationModel();
 		$loggedUser = $authentificationModel->getLoggedUser();
 
-		// Si utilisateur non connecté
+		// If user is not connected, redirect to login page
 		if (!$loggedUser){
-			// Redirige vers le login
 			$this->redirectToLogin();
 		}
 
@@ -36,17 +34,19 @@ class AuthorizationModel
 		}
 
 		return false;
+
 	}
 
 	/**
-	 * Redirige vers la page de connexion
+	 * Redirect to login page
 	 */
-	public function redirectToLogin()
-	{
+	public function redirectToLogin(){
+
 		$app = getApp();
 
 		$controller = new \W\Controller\Controller();
 		$controller->redirectToRoute($app->getConfig('security_login_route_name'));
+		
 	}
 
 }
