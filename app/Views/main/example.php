@@ -1,11 +1,11 @@
-<?php $this->layout('layout', ['title' => translate('helloWorld'), 'lang' => $lang]) ?>
+<?php $this->layout('layout', ['title' => $this->translate('helloWorld'), 'lang' => $lang]) ?>
 
 
 <?php $this->start('main_content') ?>
 
 <div class="container">
 
-    <h1><?= translate('helloWorld') ?></h1>
+    <h1><?= $this->translate('helloWorld') ?></h1>
 
     <!-- SLIDER -->
     <section class="slider" id="slider-articles">
@@ -29,7 +29,7 @@
         </article>
     </section>
 
-    <h2><?= translate('asdf') ?></h2>
+    <h2><?= $this->translate('asdf') ?></h2>
 
 </div>
 

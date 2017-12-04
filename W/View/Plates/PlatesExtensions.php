@@ -18,9 +18,22 @@ class PlatesExtensions implements ExtensionInterface{
 
         $engine->registerFunction('assetUrl', [$this, 'assetUrl']);
         $engine->registerFunction('url', [$this, 'generateUrl']);
+        $engine->registerFunction('translate', [$this, 'translate']);
 
     }
 
+    /**
+	 * Return text from default.php (default) or another file in 'assets/translations/', depending on the language in the URL
+	 * @param string $key Array key in the translation file from which to choose the correct translation
+	 * @param string $file Name of the file containing the translations, 'default' by default
+	 */
+	function translate($key, $file='default'){
+
+		require dirname($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR . 'htdocs' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'translations' . DIRECTORY_SEPARATOR . $file . '.php';
+
+		return $default_translations[$key][substr($_SERVER['REQUEST_URI'], 1, 2)];
+
+	}
 
     /**
      * Returns the asset URL
@@ -47,5 +60,5 @@ class PlatesExtensions implements ExtensionInterface{
     	return \W\Controller\Controller::generateUrl($routeName, $params, $absolute);
 
     }
-    
+
 }

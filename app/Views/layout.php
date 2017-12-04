@@ -46,11 +46,11 @@
                 <ul>
                     <li><i class="fa fa-times" aria-hidden="true"></i></li>
                     <li><a href="<?= $this->url('main_example', array('lang' => $lang)) ?>"><img src="<?= $this->assetUrl('img/logo.png') ?>" alt=""></a></li>
-                    <li><a href="<?= $this->url('main_example', array('lang' => $lang)) ?>"><?= translate('home') ?></a></li>
+                    <li><a href="<?= $this->url('main_example', array('lang' => $lang)) ?>"><?= $this->translate('home') ?></a></li>
                     <li><a href="<?= $this->url('main_home', array('lang' => $lang)) ?>">Blabla</a></li>
                     <li>
                         <form action="" method="GET" >
-                            <input type="search" name="search" placeholder="<?= translate('search') ?>" />
+                            <input type="search" name="search" placeholder="<?= $this->translate('search') ?>" />
                             <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                         </form>
                     </li>
