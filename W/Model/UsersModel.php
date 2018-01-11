@@ -16,6 +16,8 @@ class UsersModel extends Model{
 
 		$this->setTable($app->getConfig('security_user_table'));
 
+		$this->setPrimaryKey($app->getConfig('security_id_property'));
+
 		$this->dbh = ConnectionModel::getDbh();
 
 	}
@@ -103,5 +105,5 @@ class UsersModel extends Model{
 	    return false;
 
 	}
-	
+
 }

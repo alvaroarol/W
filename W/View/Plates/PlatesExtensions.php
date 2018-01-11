@@ -31,7 +31,9 @@ class PlatesExtensions implements ExtensionInterface{
 
 		require dirname($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR . 'htdocs' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'translations' . DIRECTORY_SEPARATOR . $file . '.php';
 
-		return $default_translations[$key][substr($_SERVER['REQUEST_URI'], 1, 2)];
+        $arrayName = $file . '_translations';
+
+		return $$arrayName[$key][substr($_SERVER['REQUEST_URI'], 1, 2)];
 
 	}
 
